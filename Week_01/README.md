@@ -63,4 +63,21 @@ var removeDuplicates = function(nums) {
     // length = i + 1;
     return i + 1;
 };
-时间复杂度2次循环O(n2) 空间复杂度O(1);
+时间O(n2) 空间O(1);
+
+https://leetcode-cn.com/problems/rotate-array/submissions/
+暴力法，每次移动一位
+var rotate = function (nums, k) {
+  if (nums.length < 2 || k === 0) return nums;
+  const len = nums.length;
+  let temp, previous;
+  for (let i = 0; i < k; i++) {
+    previous = nums[len - 1];
+    for (let j = 0; j < len; j++) {
+      const temp = nums[j];
+      nums[j] = previous;
+      previous = temp;
+    }
+  }
+};
+时间O(n*k) 空间O(1);
