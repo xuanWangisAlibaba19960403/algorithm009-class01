@@ -70,6 +70,7 @@ https://leetcode-cn.com/problems/rotate-array/submissions/
 var rotate = function (nums, k) {
   if (nums.length < 2 || k === 0) return nums;
   const len = nums.length;
+  k = k % len; // k > len 时只用移动k % len 次即可
   let temp, previous;
   for (let i = 0; i < k; i++) {
     previous = nums[len - 1];
@@ -81,3 +82,88 @@ var rotate = function (nums, k) {
   }
 };
 时间O(n*k) 空间O(1);
+
+使用环状替换
+求出当前元素最后位置进行替换，保留被替换元素值与索引，为下次替换，通过计数跳出循环
+var rotate = function (nums, k) {
+  if (nums.length < 2 || k === 0) return nums;
+  const len = nums.length;
+  k = k % len; // k > len 时只用移动k % len次即可
+  let count = 0;
+  for (let start = 0; count < len; start++) {
+    let current = start;
+    let prev = nums[start];
+    do {
+      const next = (current + k) % len;
+      const temp = nums[next];
+      nums[next] = prev;
+      prev = temp;
+      current = next; 
+      count++;
+    } while (start != current);
+  }
+}
+时间O(n) 空间O(1);
+
+var rotate = function (nums, k) {
+  if (nums.length < 2 || k === 0) return nums;
+  const len = nums.length;
+  k = k % len;
+  reverse(nums, 0, len - 1);
+  reverse(nums, 0, k - 1);
+  reverse(nums, k, len - 1);
+}
+
+var reverse = function(nums, start, end) {
+  const len = (end - start) // 计算执行次数
+  for (let i = 0; i < len; i++) {
+    [nums[i + start], nums[end - i]] = [nums[end - i], nums[i + start]];
+  }
+}
+时间O(n) 空间O(1);
+
+https://leetcode-cn.com/problems/merge-two-sorted-lists/submissions/
+当l1链表和l2链表都存在时，返回当前值小的节点，通过哨兵，返回正确的链表
+var mergeTwoLists = function(l1, l2) {
+  if (l1 === null && l2 === null) {
+    return null;
+  } else if (l1 === null) {
+    return l2;
+  } else if (l2 === null) {
+    return l1;
+  }
+  const thead = new ListNode(-1);
+  let prev = thead;
+  while (l1 && l2) {
+    if (l1.val < l2.val) {
+      prev.next = l1;
+      l1 = l1.next;
+    } else {
+      prev.next = l2;
+      l2 = l2.next;
+    }
+    prev = prev.next;
+  }
+  prev.next = l1 === null ? l2 : l1;
+  return thead.next;
+};
+时间O(n), 空间O(n)
+
+var mergeTwoLists = function(l1, l2) {
+  // 1.终止条件
+  // 2.返回值
+  if (l1 === null) {
+    return l2;
+  }
+  if (l2 === null) {
+    return l1;
+  }
+  if (l1.val < l2.val) {
+    l1.next = mergeTwoLists(l1.next, l2);
+    return l1;
+  } else {
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
+  }
+}
+时间O(m + n), 空间O(m + n)
