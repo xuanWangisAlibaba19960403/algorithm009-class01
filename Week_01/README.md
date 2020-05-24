@@ -167,3 +167,119 @@ var mergeTwoLists = function(l1, l2) {
   }
 }
 时间O(m + n), 空间O(m + n)
+
+https://leetcode-cn.com/problems/plus-one/
+var plusOne = function(digits) {
+  if (digits.length === 0) {
+    return [];
+  }
+  const len = digits.length - 1;
+  let n = 1;
+  for (let i = len; i >= 0; i--) {
+    const sum = n + digits[i];
+    if (sum >= 10) {
+      digits[i] = 0
+      n = 1;
+    } else {
+      digits[i] = sum;
+      n = 0;
+    }
+  }
+  if (n >= 1) digits.unshift(n);
+  return digits;
+};
+时间O(n) 空间O(1)
+
+var plusOne = function(digits) {
+  if (digits.length === 0) {
+    return [];
+  }
+  const len = digits.length - 1;
+  let n = 1;
+  for (let i = len; i >= 0; i--) {
+    const sum = n + digits[i];
+    if (sum >= 10) {
+      digits[i] = 0
+      n = 1;
+    } else {
+      // 如果末位不进位 就可以中断了
+      digits[i] = sum;
+      return digits;
+    }
+  }
+  // 最后一次n=1说明数组需要在最前面补一位0
+  if (n >= 1) digits.unshift(n);
+  return digits;
+};
+时间O(n) 空间O(1)
+
+https://leetcode-cn.com/problems/merge-sorted-array/
+因为数组为有序数组，所以当前有效索引的元素的值远如果小与另一个有序数组的最大索引元素，那这个元素即为两个数组中最大元素，反之一样
+var merge = function (nums1, m, nums2, n) {
+  let len = nums1.length - 1;
+  m -= 1;
+  n -= 1;
+  while (n >= 0) {
+    if (nums1[m] > nums2[n]) {
+      nums1[len] = nums1[m]
+      m--;
+    } else {
+      nums1[len] = nums2[n]
+      n--;
+    }
+    len --;
+  }
+  return nums1;
+}
+时间O(n) 空间O(1)
+
+https://leetcode-cn.com/problems/move-zeroes/submissions/
+var moveZeroes = function(nums) {
+  if (nums.length < 2) {
+    return;
+  }
+  let j = 0;
+  const len = nums.length;
+  for (let i = 0; i < len; i++) {
+    if (nums[i] !== 0) {
+      nums[j++] = nums[i];
+    }
+  }
+  for (let i = j; i < len; i++) {
+    nums[i] = 0;
+  }
+};
+时间O(n) 空间O(1)
+
+var moveZeroes = function(nums) {
+  if (nums.length < 2) {
+    return;
+  }
+  let j = 0;
+  const len = nums.length;
+  for (let i = 0; i < len; i++) {
+    if (nums[i] !== 0) { // 第一个数为非0时候 有一次额外操作
+      const temp = nums[i];
+      nums[i] = nums[j];
+      nums[j++] = temp;
+    }
+  }
+};
+时间O(n) 空间O(1)
+
+var moveZeroes = function(nums) {
+  if (nums.length < 2) {
+    return;
+  }
+  let j = 0;
+  const len = nums.length;
+  for (let i = 0; i < len; i++) {
+    if (nums[i] !== 0) {
+      if (i > j) { // 避免双指针指向同一个元素 做额外操作
+        nums[j] = nums[i];
+        nums[i] = 0;
+      }
+      j ++;
+    }
+  }
+};
